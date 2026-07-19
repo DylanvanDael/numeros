@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Números — Tips for learners</title>
+<style>
+  :root {
+    --bg: #f2ede2; --bg-tile: #e7dfcd; --card: #fbf8f1; --ink: #1b2a4a;
+    --ink-soft: #5a6478; --line: #d9cfb8; --azul: #21509e; --azul-deep: #163b78;
+    --saffron: #d98a1f; --jade: #2b8a6b; --terra: #c14a34;
+    --shadow: 24px 32px 60px -34px rgba(22,40,80,.45);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #101728; --bg-tile: #16203a; --card: #1a2540; --ink: #eef2fb;
+      --ink-soft: #9aa6c4; --line: #2c3960; --azul: #6d9bef; --azul-deep: #4d7ad6;
+      --saffron: #ecb457; --jade: #55c79c; --terra: #ef7a62;
+      --shadow: 24px 34px 70px -34px rgba(0,0,0,.7);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f2ede2; --bg-tile: #e7dfcd; --card: #fbf8f1; --ink: #1b2a4a;
+    --ink-soft: #5a6478; --line: #d9cfb8; --azul: #21509e; --azul-deep: #163b78;
+    --saffron: #d98a1f; --jade: #2b8a6b; --terra: #c14a34;
+    --shadow: 24px 32px 60px -34px rgba(22,40,80,.45);
+  }
+  :root[data-theme="dark"] {
+    --bg: #101728; --bg-tile: #16203a; --card: #1a2540; --ink: #eef2fb;
+    --ink-soft: #9aa6c4; --line: #2c3960; --azul: #6d9bef; --azul-deep: #4d7ad6;
+    --saffron: #ecb457; --jade: #55c79c; --terra: #ef7a62;
+    --shadow: 24px 34px 70px -34px rgba(0,0,0,.7);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 12% 14%, color-mix(in srgb, var(--azul) 8%, transparent) 0 12px, transparent 13px) 0 0 / 46px 46px,
+      radial-gradient(circle at 62% 64%, color-mix(in srgb, var(--saffron) 10%, transparent) 0 9px, transparent 10px) 0 0 / 46px 46px,
+      var(--bg);
+    color: var(--ink);
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    display: flex; flex-direction: column; align-items: center;
+    padding: clamp(16px, 4vw, 44px);
+    -webkit-font-smoothing: antialiased;
+  }
+  .ui { font-family: "Avenir Next", "Segoe UI", system-ui, sans-serif; }
+  .wrap { width: 100%; max-width: 640px; }
+
+  .back {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: "Avenir Next", system-ui, sans-serif; font-size: 13px; font-weight: 600;
+    color: var(--azul); text-decoration: none; margin-bottom: 22px;
+  }
+  .back:hover { text-decoration: underline; }
+
+  header.masthead { margin-bottom: 30px; }
+  header.masthead h1 {
+    margin: 0; font-size: clamp(30px, 7vw, 46px); font-weight: 600;
+    letter-spacing: -.6px; text-wrap: balance;
+  }
+  header.masthead h1 .dot { color: var(--saffron); }
+  header.masthead p {
+    margin: 10px 0 0; color: var(--ink-soft); font-size: clamp(15px, 3.6vw, 17px);
+    line-height: 1.55; max-width: 52ch;
+  }
+
+  .group { margin-bottom: 30px; }
+  .group > .label {
+    font-family: "Avenir Next", system-ui, sans-serif; font-size: 11px;
+    letter-spacing: .2em; text-transform: uppercase; color: var(--ink-soft);
+    padding-bottom: 10px; margin-bottom: 14px; border-bottom: 1px solid var(--line);
+  }
+  .tips { display: grid; gap: 14px; }
+  .tip {
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    box-shadow: var(--shadow); padding: clamp(16px, 3.5vw, 22px);
+  }
+  .tip h3 {
+    margin: 0 0 7px; font-size: clamp(17px, 4vw, 20px); font-weight: 600;
+    letter-spacing: -.2px; line-height: 1.25; text-wrap: balance;
+  }
+  .tip p {
+    margin: 0; font-family: "Avenir Next", system-ui, sans-serif;
+    font-size: 14.5px; line-height: 1.6; color: var(--ink-soft);
+  }
+  .ex {
+    margin-top: 12px; display: flex; flex-wrap: wrap; gap: 7px;
+  }
+  .ex span {
+    font-family: "Avenir Next", system-ui, sans-serif; font-size: 13.5px;
+    background: color-mix(in srgb, var(--azul) 9%, var(--card));
+    border: 1px solid color-mix(in srgb, var(--azul) 22%, transparent);
+    color: var(--ink); border-radius: 999px; padding: 5px 12px;
+  }
+  .ex span b { color: var(--azul); font-weight: 700; }
+  .ex span s { color: var(--terra); text-decoration-thickness: 1.5px; opacity: .85; }
+  .ex span em { font-style: normal; color: var(--ink-soft); }
+
+  .cta {
+    background: var(--azul); color: #fff; border-radius: 16px;
+    padding: clamp(20px, 4vw, 28px); text-align: center; box-shadow: var(--shadow);
+  }
+  .cta h2 { margin: 0 0 6px; font-size: clamp(20px, 5vw, 26px); font-weight: 600; }
+  .cta p { margin: 0 0 16px; font-family: "Avenir Next", system-ui, sans-serif; font-size: 14px; color: color-mix(in srgb, #fff 82%, var(--azul)); line-height: 1.55; }
+  .cta a {
+    display: inline-block; font-family: "Avenir Next", system-ui, sans-serif;
+    font-weight: 700; font-size: 15px; text-decoration: none;
+    background: #fff; color: var(--azul-deep); padding: 11px 22px; border-radius: 11px;
+  }
+  .cta a:hover { background: color-mix(in srgb, #fff 88%, var(--saffron)); }
+
+  footer { margin-top: 26px; text-align: center; font-family: "Avenir Next", system-ui, sans-serif; font-size: 12px; color: var(--ink-soft); }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="./">← Back to the game</a>
+
+    <header class="masthead">
+      <h1>Reading the numbers<span class="dot">.</span></h1>
+      <p>Spanish numbers are mostly a pattern — learn <b>1&nbsp;to&nbsp;15</b> and the twenties by heart, and the rest falls into place. These are the spots that trip people up. Pin the pattern here, then drill it in the game.</p>
+    </header>
+
+    <section class="group">
+      <div class="label ui">Spelling &amp; accents</div>
+      <div class="tips">
+        <div class="tip">
+          <h3>Only four numbers hide a written accent</h3>
+          <p>Among the teens and twenties, the accent lands exactly on the ones built from <i>seis</i>, <i>dós</i> and <i>trés</i>. Nowhere else.</p>
+          <div class="ex ui">
+            <span>16 <b>dieciséis</b></span>
+            <span>22 <b>veintidós</b></span>
+            <span>23 <b>veintitrés</b></span>
+            <span>26 <b>veintiséis</b></span>
+          </div>
+        </div>
+        <div class="tip">
+          <h3>16–29 are one word; 30 and up split into three</h3>
+          <p>The teens and twenties are written solid. From thirty on, you spell them out with <i>y</i> between the tens and the units. The old two-word forms are archaic.</p>
+          <div class="ex ui">
+            <span><b>veintiuno</b> <em>one word</em></span>
+            <span><b>treinta y uno</b> <em>three</em></span>
+            <span><s>diez y seis</s> <em>→ dieciséis</em></span>
+          </div>
+        </div>
+        <div class="tip">
+          <h3>The word <i>y</i> only sits between tens and units</h3>
+          <p>It never appears after the hundreds. So there's an <i>y</i> in <i>treinta y cinco</i>, but none right after <i>ciento</i>.</p>
+          <div class="ex ui">
+            <span>105 <b>ciento cinco</b> <em>(no y)</em></span>
+            <span>135 <b>ciento treinta y cinco</b></span>
+            <span><s>ciento y cinco</s></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="group">
+      <div class="label ui">The hundreds</div>
+      <div class="tips">
+        <div class="tip">
+          <h3><i>cien</i> for exactly 100, <i>ciento</i> for 101–199</h3>
+          <p>On its own, and before a bigger unit, it's <i>cien</i>. The moment something smaller follows, it becomes <i>ciento</i>.</p>
+          <div class="ex ui">
+            <span>100 <b>cien</b></span>
+            <span>101 <b>ciento</b> uno</span>
+            <span>100 000 <b>cien</b> mil</span>
+            <span>100 000 000 <b>cien</b> millones</span>
+          </div>
+        </div>
+        <div class="tip">
+          <h3>Three of the hundreds are irregular</h3>
+          <p>Most follow the pattern (<i>doscientos</i>, <i>trescientos</i>…), but 500, 700 and 900 don't. Memorise these three directly.</p>
+          <div class="ex ui">
+            <span>500 <b>quinientos</b> <s>cincocientos</s></span>
+            <span>700 <b>setecientos</b> <s>sietecientos</s></span>
+            <span>900 <b>novecientos</b> <s>nuevecientos</s></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="group">
+      <div class="label ui">Grammar that changes the word</div>
+      <div class="tips">
+        <div class="tip">
+          <h3><i>uno</i> shortens to <i>un</i> before a masculine noun</h3>
+          <p>When you actually count something masculine, <i>uno</i> drops its <i>-o</i>. And 21 picks up an accent as <i>veintiún</i>.</p>
+          <div class="ex ui">
+            <span><b>un</b> día</span>
+            <span><b>veintiún</b> años</span>
+            <span>treinta y <b>un</b> libros</span>
+          </div>
+        </div>
+        <div class="tip">
+          <h3>“One” and the hundreds agree in gender</h3>
+          <p>Before a feminine noun, the ending flips to <i>-a</i>: <i>una</i>, <i>veintiuna</i>, and the hundreds too — <i>doscientas</i>, <i>quinientas</i>.</p>
+          <div class="ex ui">
+            <span><b>una</b> casa</span>
+            <span><b>veintiuna</b> personas</span>
+            <span><b>doscientas</b> casas <s>doscientos</s></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="group">
+      <div class="label ui">Thousands &amp; millions</div>
+      <div class="tips">
+        <div class="tip">
+          <h3><i>mil</i> takes no “un”, and doesn't pluralise as a count</h3>
+          <p>1,000 is simply <i>mil</i> — never “un mil”. As a multiplier it stays <i>mil</i>: <i>dos mil</i>, <i>cien mil</i>. (The plural <i>miles</i> only means a vague “thousands of”.)</p>
+          <div class="ex ui">
+            <span>1000 <b>mil</b> <s>un mil</s></span>
+            <span>2000 <b>dos mil</b></span>
+            <span>100 000 <b>cien mil</b> <s>cien miles</s></span>
+          </div>
+        </div>
+        <div class="tip">
+          <h3><i>millón</i> is a noun — it pluralises and needs <i>de</i></h3>
+          <p>Unlike <i>mil</i>, a million behaves like a real noun: <i>un millón</i>, <i>dos millones</i>, and it takes <i>de</i> before whatever you're counting.</p>
+          <div class="ex ui">
+            <span><b>un millón de</b> euros</span>
+            <span><b>tres millones de</b> personas</span>
+            <span>but: <b>mil</b> euros <em>(no “de”)</em></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="group">
+      <div class="label ui">Reading &amp; writing figures</div>
+      <div class="tips">
+        <div class="tip">
+          <h3>The decimal point and thousands separator are swapped</h3>
+          <p>In Spain and much of the Spanish-speaking world it's the reverse of English: a comma marks decimals, a period (or a thin space) groups thousands. Some Latin American countries follow the English style instead — so read the context.</p>
+          <div class="ex ui">
+            <span><b>1.000</b> = one thousand</span>
+            <span><b>3,14</b> = three point one four</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cta">
+      <h2>Now make it stick</h2>
+      <p>Rules fade; reps don't. Try <b>reverse mode</b> to go from Spanish back to digits, and let the game re-serve whatever you miss until the irregular hundreds feel automatic.</p>
+      <a href="./">Play Números →</a>
+    </div>
+
+    <footer class="ui">Números · a little Spanish-number drill</footer>
+  </div>
+
+  <script>
+    // keep in step with the game's light/dark toggle if the host stamps data-theme
+    (function () {
+      var saved;
+      try { saved = localStorage.getItem("numeros.theme"); } catch (e) {}
+      if (saved === "dark" || saved === "light") document.documentElement.setAttribute("data-theme", saved);
+    })();
+  </script>
+</body>
+</html>
