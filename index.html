@@ -1,3 +1,16 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<meta name="theme-color" content="#f2ede2" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#101728" media="(prefers-color-scheme: dark)" />
+<meta name="description" content="A little game for practicing Spanish numbers (1 to 100 million), days of the week, and months of the year." />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Números" />
 <title>Números — Spanish Numbers, Days & Months</title>
 <style>
   :root {
@@ -231,7 +244,33 @@
 
   @media (max-width: 460px) { .stats { grid-template-columns: repeat(2,1fr); } }
   @media (prefers-reduced-motion: reduce) { *, ::before, ::after { animation: none !important; transition: none !important; } }
+
+  /* ---- touch / mobile ---- */
+  html { -webkit-text-size-adjust: 100%; }
+  button, input, select, a, .seg button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  body {
+    padding-top: max(clamp(16px,4vw,40px), env(safe-area-inset-top));
+    padding-bottom: max(clamp(16px,4vw,40px), env(safe-area-inset-bottom));
+    padding-left: max(clamp(16px,4vw,40px), env(safe-area-inset-left));
+    padding-right: max(clamp(16px,4vw,40px), env(safe-area-inset-right));
+  }
+  @media (max-width: 560px) {
+    header { margin-bottom: 14px; }
+    .settings { gap: 9px; }
+    .settings .ctl:first-child { flex: 1 1 100%; }   /* Practice picker spans the row */
+    .sel { width: 100%; }
+    .seg { width: 100%; }
+    .seg button { flex: 1 1 0; padding: 10px 6px; }   /* full-width, thumb-friendly toggles */
+    .tools button { padding: 12px 18px; font-size: 13.5px; }
+    input[type="text"] { padding: 15px 16px; }
+    button.go { padding: 0 20px; }
+    .card { border-radius: 20px; }
+    .card::before { inset: 8px; }
+    footer { margin-top: 16px; }
+  }
 </style>
+</head>
+<body>
 
 <header>
   <div class="brand">
@@ -776,3 +815,5 @@
   startRun();
 })();
 </script>
+</body>
+</html>

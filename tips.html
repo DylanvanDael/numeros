@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<meta name="theme-color" content="#f2ede2" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#101728" media="(prefers-color-scheme: dark)" />
 <title>Números — Tips for learners</title>
 <style>
   :root {
@@ -113,6 +116,21 @@
   .cta a:hover { background: color-mix(in srgb, #fff 88%, var(--saffron)); }
 
   footer { margin-top: 26px; text-align: center; font-family: "Avenir Next", system-ui, sans-serif; font-size: 12px; color: var(--ink-soft); }
+
+  /* ---- touch / mobile ---- */
+  html { -webkit-text-size-adjust: 100%; }
+  a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+  body {
+    padding-top: max(clamp(16px,4vw,44px), env(safe-area-inset-top));
+    padding-bottom: max(clamp(16px,4vw,44px), env(safe-area-inset-bottom));
+    padding-left: max(clamp(16px,4vw,44px), env(safe-area-inset-left));
+    padding-right: max(clamp(16px,4vw,44px), env(safe-area-inset-right));
+  }
+  @media (max-width: 560px) {
+    .cta a, .back { padding-top: 12px; padding-bottom: 12px; }
+    .back { margin-bottom: 18px; }
+  }
+  @media (prefers-reduced-motion: reduce) { *, ::before, ::after { transition: none !important; } }
 </style>
 </head>
 <body>
