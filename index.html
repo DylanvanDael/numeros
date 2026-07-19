@@ -1,4 +1,4 @@
-<title>Números — Spanish Numbers to 100 Million</title>
+<title>Números — Spanish Numbers, Days & Months</title>
 <style>
   :root {
     --bg: #f2ede2; --bg-tile: #e7dfcd; --card: #fbf8f1; --ink: #1b2a4a;
@@ -204,6 +204,8 @@
   .heat { display: grid; grid-template-columns: repeat(auto-fill, minmax(26px,1fr)); gap: 3px; margin-bottom: 10px; }
   .heat.dense { grid-template-columns: repeat(auto-fill, minmax(13px,1fr)); gap: 2px; }
   .heat.dense .cell { border-radius: 3px; }
+  .heat.words { grid-template-columns: repeat(auto-fill, minmax(96px,1fr)); gap: 6px; }
+  .heat.words .cell { aspect-ratio: auto; padding: 9px 8px; font-size: 12.5px; border-radius: 9px; text-transform: capitalize; }
   .cell {
     aspect-ratio: 1; border-radius: 5px; display: grid; place-items: center;
     font-family:"Avenir Next",system-ui,sans-serif; font-size: 9px; font-weight: 600;
@@ -234,20 +236,27 @@
 <header>
   <div class="brand">
     <h1>Números<span class="dot">.</span></h1>
-    <p>Spanish numbers · <span id="tagline">1 – 100</span></p>
+    <p><span id="tagline">Spanish numbers · 1 – 100</span></p>
   </div>
   <button class="icon-btn" id="sound" aria-pressed="true" title="Sound on/off" aria-label="Toggle sound">♪</button>
 </header>
 
 <div class="settings ui">
   <div class="ctl">
-    <label for="selMax">Range</label>
-    <select id="selMax" class="sel">
-      <option value="10">1 – 10</option>
-      <option value="100">1 – 100</option>
-      <option value="1000">1 – 1,000</option>
-      <option value="thousands">Round thousands · 1K – 200K</option>
-      <option value="millions">Round millions · 1M – 100M</option>
+    <label for="selDeck">Practice</label>
+    <select id="selDeck" class="sel">
+      <optgroup label="Numbers">
+        <option value="10">1 – 10</option>
+        <option value="100">1 – 100</option>
+        <option value="1000">1 – 1,000</option>
+        <option value="thousands">Round thousands · 1K – 200K</option>
+        <option value="millions">Round millions · 1M – 100M</option>
+      </optgroup>
+      <optgroup label="Calendar">
+        <option value="days">Days of the week</option>
+        <option value="months">Months of the year</option>
+        <option value="daysmonths">Days + months</option>
+      </optgroup>
     </select>
   </div>
   <div class="ctl">
@@ -260,8 +269,8 @@
   <div class="ctl">
     <label>Ask</label>
     <div class="seg" id="segDir">
-      <button data-v="fwd" aria-pressed="true">Num → Español</button>
-      <button data-v="rev" aria-pressed="false">Español → Num</button>
+      <button data-v="fwd" aria-pressed="true">Num → Es</button>
+      <button data-v="rev" aria-pressed="false">Es → Num</button>
     </div>
   </div>
   <div class="ctl">
@@ -385,17 +394,32 @@
 
   function seq(a, b) { var r = []; for (var i = a; i <= b; i++) r.push(i); return r; }
   function step(a, b, s) { var r = []; for (var i = a; i <= b; i += s) r.push(i); return r; }
-  var LEVELS = {
-    "10":        { tag: "1 – 10",   nums: seq(1, 10) },
-    "100":       { tag: "1 – 100",  nums: seq(1, 100) },
-    "1000":      { tag: "1 – 1,000", nums: seq(1, 1000) },
-    "thousands": { tag: "1K – 200K", nums: step(1000, 200000, 1000) },
-    "millions":  { tag: "1M – 100M", nums: step(1000000, 100000000, 1000000) }
+  var DAYS = [
+    {es:"lunes", en:"Monday"}, {es:"martes", en:"Tuesday"}, {es:"miércoles", en:"Wednesday"},
+    {es:"jueves", en:"Thursday"}, {es:"viernes", en:"Friday"}, {es:"sábado", en:"Saturday"},
+    {es:"domingo", en:"Sunday"}
+  ];
+  var MONTHS = [
+    {es:"enero", en:"January"}, {es:"febrero", en:"February"}, {es:"marzo", en:"March"},
+    {es:"abril", en:"April"}, {es:"mayo", en:"May"}, {es:"junio", en:"June"},
+    {es:"julio", en:"July"}, {es:"agosto", en:"August"}, {es:"septiembre", en:"September", esAlt:["setiembre"]},
+    {es:"octubre", en:"October"}, {es:"noviembre", en:"November"}, {es:"diciembre", en:"December"}
+  ];
+  var DECKS = {
+    "10":        { kind:"number", tag: "1 – 10",   items: seq(1, 10) },
+    "100":       { kind:"number", tag: "1 – 100",  items: seq(1, 100) },
+    "1000":      { kind:"number", tag: "1 – 1,000", items: seq(1, 1000) },
+    "thousands": { kind:"number", tag: "1K – 200K", items: step(1000, 200000, 1000) },
+    "millions":  { kind:"number", tag: "1M – 100M", items: step(1000000, 100000000, 1000000) },
+    "days":      { kind:"word", tag: "days of the week", items: DAYS },
+    "months":    { kind:"word", tag: "months of the year", items: MONTHS },
+    "daysmonths":{ kind:"word", tag: "days + months", items: DAYS.concat(MONTHS) }
   };
-  var LEVEL_KEYS = ["10","100","1000","thousands","millions"];
+  var DECK_KEYS = ["10","100","1000","thousands","millions","days","months","daysmonths"];
+  function itemKey(it) { return typeof it === "object" ? it.es : it; }
 
   var S = {
-    level:"100", pool:[], total:0, shuffle:false, reverse:false, timed:false, sound:true,
+    deck:"100", kind:"number", pool:[], total:0, shuffle:false, reverse:false, timed:false, sound:true,
     queue:[], current:1, mastered:{}, masteredCount:0,
     sessionMiss:{}, seen:{}, streak:0, best:0, correct:0, answered:0,
     startTime:0, bestTimes:{}, allMiss:{},
@@ -409,9 +433,9 @@
       if (d.bestTimes && typeof d.bestTimes === "object") S.bestTimes = d.bestTimes;
       if (d.allMiss) S.allMiss = d.allMiss;
       if (d.settings) {
-        var lv = d.settings.level;
-        if (LEVEL_KEYS.indexOf(lv) >= 0) S.level = lv;
-        else if ([10,100,1000].indexOf(d.settings.max) >= 0) S.level = String(d.settings.max);
+        var dk = d.settings.deck || d.settings.level;
+        if (DECK_KEYS.indexOf(dk) >= 0) S.deck = dk;
+        else if ([10,100,1000].indexOf(d.settings.max) >= 0) S.deck = String(d.settings.max);
         S.shuffle = !!d.settings.shuffle; S.reverse = !!d.settings.reverse;
         S.timed = !!d.settings.timed; S.sound = d.settings.sound !== false;
       }
@@ -421,7 +445,7 @@
     try {
       localStorage.setItem(LS, JSON.stringify({
         best: S.best, bestTimes: S.bestTimes, allMiss: S.allMiss,
-        settings: { level:S.level, shuffle:S.shuffle, reverse:S.reverse, timed:S.timed, sound:S.sound }
+        settings: { deck:S.deck, shuffle:S.shuffle, reverse:S.reverse, timed:S.timed, sound:S.sound }
       }));
     } catch (e) {}
   }
@@ -464,17 +488,24 @@
   }
   function startRun() {
     stopTimer(); clearTimeout(S.advanceTimer);
-    var lvl = LEVELS[S.level] || LEVELS["100"];
-    S.pool = lvl.nums; S.total = S.pool.length;
+    var dk = DECKS[S.deck] || DECKS["100"];
+    S.kind = dk.kind; S.pool = dk.items; S.total = S.pool.length;
     buildQueue();
     S.mastered = {}; S.masteredCount = 0; S.sessionMiss = {}; S.seen = {};
     S.streak = 0; S.correct = 0; S.answered = 0; S.startTime = 0; S.advancing = false;
     el("done").hidden = true; el("play").hidden = false;
     el("timerTrack").classList.toggle("on", S.timed);
     el("maxLabel").textContent = S.total;
-    el("tagline").textContent = lvl.tag;
+    el("tagline").textContent = (S.kind === "word" ? "Spanish · " : "Spanish numbers · ") + dk.tag;
+    updateDirLabels();
     updateRail();
     nextCard();
+  }
+  function updateDirLabels() {
+    var b = el("segDir").querySelectorAll("button");
+    var fwd = S.kind === "word" ? "En → Es" : "Num → Es";
+    var rev = S.kind === "word" ? "Es → En" : "Es → Num";
+    b.forEach(function(x){ x.textContent = x.dataset.v === "fwd" ? fwd : rev; });
   }
   function requeue(n, gap) {
     var pos = Math.min(gap, S.queue.length);
@@ -487,22 +518,34 @@
     S.resolved = false; S.advancing = false;
     renderPrompt();
     el("input").value = ""; el("input").className = ""; el("input").disabled = false;
-    el("input").inputMode = S.reverse ? "numeric" : "text";
+    el("input").inputMode = (S.kind === "number" && S.reverse) ? "numeric" : "text";
     el("submit").textContent = "Check";
     el("answer").textContent = ""; el("answer").className = "answer";
     el("input").focus();
     if (S.timed) startTimer();
   }
   function renderPrompt() {
-    var n = S.current, num = el("numeral");
-    var big = n >= 10000;
+    var it = S.current, num = el("numeral");
+    if (S.kind === "word") {
+      if (S.reverse) {
+        el("kicker").textContent = "Type this in English";
+        num.textContent = it.es; num.className = "numeral word";
+        el("input").placeholder = "e.g. Monday";
+      } else {
+        el("kicker").textContent = "Type this in Spanish";
+        num.textContent = it.en; num.className = "numeral word";
+        el("input").placeholder = "e.g. lunes";
+      }
+      return;
+    }
+    var big = it >= 10000;
     if (S.reverse) {
       el("kicker").textContent = "Write this as digits";
-      num.textContent = name(n); num.className = "numeral word";
+      num.textContent = name(it); num.className = "numeral word";
       el("input").placeholder = big ? "e.g. 20000" : "e.g. 42";
     } else {
       el("kicker").textContent = "Type this number in Spanish";
-      num.textContent = formatNum(n);
+      num.textContent = formatNum(it);
       num.className = big ? "numeral big" : "numeral";
       el("input").placeholder = "e.g. uno";
     }
@@ -526,16 +569,33 @@
 
   /* ---- answer handling ---- */
   function isCorrect(val) {
-    if (S.reverse) {
-      var digits = val.replace(/[.,\s]/g, "");
-      return /^\d+$/.test(digits) && parseInt(digits, 10) === S.current;
+    if (S.kind === "number") {
+      if (S.reverse) {
+        var digits = val.replace(/[.,\s]/g, "");
+        return /^\d+$/.test(digits) && parseInt(digits, 10) === S.current;
+      }
+      return norm(val) === norm(name(S.current));
     }
-    return norm(val) === norm(name(S.current));
+    var it = S.current, got = norm(val);
+    var target = S.reverse ? it.en : it.es;
+    if (got === norm(target)) return true;
+    var alts = S.reverse ? (it.enAlt || []) : (it.esAlt || []);
+    for (var i = 0; i < alts.length; i++) if (norm(alts[i]) === got) return true;
+    return false;
+  }
+  // correct answer, as a display string
+  function targetText() {
+    if (S.kind === "number") return S.reverse ? formatNum(S.current) : name(S.current);
+    return S.reverse ? S.current.en : S.current.es;
+  }
+  function correctDisplay() {
+    if (S.kind === "number") return S.reverse ? (formatNum(S.current) + " ✓") : name(S.current);
+    return S.reverse ? S.current.en : S.current.es;
   }
   function markMiss() {
-    var n = S.current;
-    S.sessionMiss[n] = (S.sessionMiss[n]||0) + 1;
-    S.allMiss[n] = (S.allMiss[n]||0) + 1;
+    var k = itemKey(S.current);
+    S.sessionMiss[k] = (S.sessionMiss[k]||0) + 1;
+    S.allMiss[k] = (S.allMiss[k]||0) + 1;
   }
   function updateBest() {
     if (S.streak > S.best) { S.best = S.streak; save(); }
@@ -563,10 +623,11 @@
     S.answered++;
     if (isCorrect(raw)) {
       S.correct++; S.streak++; updateBest();
-      if (!S.mastered[S.current]) { S.mastered[S.current] = true; S.masteredCount++; }
+      var mk = itemKey(S.current);
+      if (!S.mastered[mk]) { S.mastered[mk] = true; S.masteredCount++; }
       flash("ok"); okSound();
       el("answer").className = "answer ok";
-      el("answer").textContent = S.reverse ? (formatNum(S.current) + " ✓") : name(S.current);
+      el("answer").textContent = correctDisplay();
       S.resolved = true; el("submit").textContent = "Next →"; updateRail();
       S.advanceTimer = setTimeout(advanceNow, 700);
     } else {
@@ -585,14 +646,16 @@
     updateRail();
   }
   function showSolution(raw, lead) {
-    var n = S.current, ans = el("answer");
+    var ans = el("answer");
     ans.className = "answer bad";
-    if (S.reverse) {
-      ans.innerHTML = '<span class="lead">'+(lead||"Answer")+'</span><span class="sol">'+formatNum(n)+' <em style="font-style:normal;color:var(--ink-soft);font-weight:400">('+name(n)+')</em></span>'
+    var head = '<span class="lead">'+(lead||"Answer")+'</span>';
+    if (S.kind === "number" && S.reverse) {
+      ans.innerHTML = head + '<span class="sol">'+formatNum(S.current)
+        + ' <em style="font-style:normal;color:var(--ink-soft);font-weight:400">('+name(S.current)+')</em></span>'
         + (raw.trim() ? '<div class="mine">you wrote <s>'+esc(raw.trim())+'</s></div>' : '');
     } else {
-      var d = diff(raw.trim().toLowerCase(), name(n));
-      ans.innerHTML = '<span class="lead">'+(lead||"Answer")+'</span><span class="sol">'+d.sol+'</span>'
+      var d = diff(raw.trim(), targetText());
+      ans.innerHTML = head + '<span class="sol">'+d.sol+'</span>'
         + (raw.trim() ? '<div class="mine">you wrote <s>'+d.mine+'</s></div>' : '');
     }
     S.resolved = true; el("input").disabled = true; el("submit").textContent = "Next →";
@@ -611,14 +674,15 @@
     el("play").hidden = true; el("done").hidden = false;
     el("bar").style.width = "100%"; el("mastered").textContent = S.total;
     var elapsed = S.startTime ? (Date.now() - S.startTime) : 0;
-    var prev = S.bestTimes[S.level] || 0;
+    var prev = S.bestTimes[S.deck] || 0;
     var isBestTime = elapsed && (!prev || elapsed < prev);
-    if (isBestTime) { S.bestTimes[S.level] = elapsed; }
+    if (isBestTime) { S.bestTimes[S.deck] = elapsed; }
     save();
 
+    var word = S.kind === "word";
     var acc = S.answered ? Math.round(S.correct/S.answered*100) : 0;
     var perfect = 0;
-    S.pool.forEach(function(n){ if (!S.sessionMiss[n]) perfect++; });
+    S.pool.forEach(function(it){ if (!S.sessionMiss[itemKey(it)]) perfect++; });
     el("doneSub").textContent = "All " + S.total + " mastered" + (isBestTime ? " · new best time!" : "") + ".";
 
     el("stats").innerHTML = [
@@ -628,25 +692,30 @@
       stat(perfect, "First-try")
     ].join("");
 
-    // trouble numbers (most slips this run)
+    // trickiest this run (most slips)
     var trouble = [];
-    S.pool.forEach(function(n){ if (S.sessionMiss[n]) trouble.push([n, S.sessionMiss[n]]); });
+    S.pool.forEach(function(it){ var m = S.sessionMiss[itemKey(it)]; if (m) trouble.push([it, m]); });
     trouble.sort(function(a,b){ return b[1]-a[1]; });
     if (trouble.length) {
-      var top = trouble.slice(0,6).map(function(x){ return "<b>"+formatNum(x[0])+"</b> ("+name(x[0])+")"; }).join(", ");
+      var top = trouble.slice(0,6).map(function(x){
+        return word ? "<b>"+x[0].es+"</b> ("+x[0].en+")" : "<b>"+formatNum(x[0])+"</b> ("+name(x[0])+")";
+      }).join(", ");
       el("trouble").innerHTML = "Trickiest this run: " + top;
     } else {
       el("trouble").innerHTML = "Flawless run — not a single slip. 🌟";
     }
 
-    var showNums = S.pool[S.pool.length-1] <= 199;
-    el("heat").classList.toggle("dense", !showNums);
+    var showText = word || S.pool[S.pool.length-1] <= 199;
+    el("heat").classList.toggle("dense", !word && !showText);
+    el("heat").classList.toggle("words", word);
     var cells = "";
-    S.pool.forEach(function(n){
-      var mc = S.sessionMiss[n] || 0;
+    S.pool.forEach(function(it){
+      var mc = S.sessionMiss[itemKey(it)] || 0;
       var cls = mc === 0 ? "hm0" : (mc === 1 ? "hm1" : "hm2");
       var lbl = mc === 0 ? "nailed first try" : (mc + (mc === 1 ? " slip" : " slips"));
-      cells += '<div class="cell '+cls+'" title="'+formatNum(n)+' · '+name(n)+' — '+lbl+'">'+(showNums ? n : "")+'</div>';
+      var title = word ? (it.es+" · "+it.en+" — "+lbl) : (formatNum(it)+" · "+name(it)+" — "+lbl);
+      var text = word ? it.es : (showText ? it : "");
+      cells += '<div class="cell '+cls+'" title="'+title+'">'+text+'</div>';
     });
     el("heat").innerHTML = cells;
   }
@@ -695,9 +764,9 @@
   // reflect loaded settings into controls
   el("sound").setAttribute("aria-pressed", String(S.sound));
   el("sound").textContent = S.sound ? "♪" : "𝄽";
-  el("selMax").value = S.level;
-  el("selMax").addEventListener("change", function(){
-    S.level = LEVEL_KEYS.indexOf(this.value) >= 0 ? this.value : "100";
+  el("selDeck").value = S.deck;
+  el("selDeck").addEventListener("change", function(){
+    S.deck = DECK_KEYS.indexOf(this.value) >= 0 ? this.value : "100";
     save(); startRun();
   });
   segInit("segOrder", S.shuffle ? "shuf" : "seq", function(v){ S.shuffle = (v==="shuf"); });

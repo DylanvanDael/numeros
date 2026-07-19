@@ -1,14 +1,14 @@
 # Números
 
-A little browser game for practicing **Spanish numbers** — from `uno` all the way to `cien millones`. A number is shown; you type it in Spanish (or flip it around and type the digits).
+A little browser game for practicing **Spanish numbers** — from `uno` all the way to `cien millones` — plus the **days of the week** and **months of the year**. A prompt is shown; you type the Spanish (or flip it around and type the digits / English).
 
 **Play it:** open `index.html` in any browser. No build step, no dependencies — it's a single self-contained HTML file.
 
 ## Features
 
-- **Ranges** — drill 1–10, 1–100, 1–1,000, round thousands (1K–200K), or round millions (1M–100M).
-- **Smart repetition** — numbers you miss circle back until you get them right.
-- **Reverse mode** — show the Spanish, type the digits (accepts `20000`, `20.000`, or `20,000`).
+- **Decks** — numbers (1–10, 1–100, 1–1,000, round thousands 1K–200K, round millions 1M–100M), plus **days of the week**, **months of the year**, and **days + months**.
+- **Smart repetition** — anything you miss circles back until you get it right.
+- **Reverse mode** — show the Spanish, type the digits (accepts `20000`, `20.000`, or `20,000`) or the English day/month.
 - **Accent-tolerant** — `veintidós` or `veintidos` both count.
 - **Timer mode** — an optional 10-second countdown per card.
 - **Feedback** — streak, live accuracy, a per-number heatmap of your run, and your trickiest numbers.
